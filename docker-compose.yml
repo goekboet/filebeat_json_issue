@@ -25,7 +25,7 @@ services:
     build:
       context: writer
     labels:
-        co.elastic.logs/processors.decode_json_fields.fields: '["message"]'
-        co.elastic.logs/processors.decode_json_fields.overwrite_keys: true 
+        co.elastic.logs/processors.decode_json_fields.fields: '["log"]'
+        co.elastic.logs/processors.decode_json_fields.overwrite_keys: "True" 
     depends_on:
       - filebeat
