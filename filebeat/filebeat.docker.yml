@@ -1,0 +1,8 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+output.file:
+  path: "/tmp/filebeat"
+  filename: filebeat

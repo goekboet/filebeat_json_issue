@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  filebeat:
+    user: root
+    image: docker.elastic.co/beats/filebeat-oss:7.1.1
+    command: filebeat -e -strict.perms=false
+    volumes: 
+      - type: bind
+        source: ./filebeat/filebeat.docker.yml
+        target: /usr/share/filebeat/filebeat.yml
+        read_only: true
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+      - type: bind
+        source: ./output
+        target: /tmp/filebeat
+
+  writer:
+    build:
+      context: writer
+    labels:
+        co.elastic.logs/processors.decode_json_fields.fields: '["message"]'
+        co.elastic.logs/processors.decode_json_fields.overwrite_keys: true 
+    depends_on:
+      - filebeat
